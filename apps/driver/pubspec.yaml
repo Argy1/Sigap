@@ -21,6 +21,9 @@ version: 1.0.0+1
 environment:
   sdk: ^3.11.0
 
+# Bagian dari pub workspace di root repo — lihat /pubspec.yaml.
+resolution: workspace
+
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -30,6 +33,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # Widget & tema yang sama persis dengan App Pasien.
+  mobile_core:
+    path: ../../packages/mobile-core
+
+  flutter_riverpod: ^3.0.3
+  geolocator: ^14.0.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
