@@ -1,0 +1,331 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Font — dibundel lewat npm (@fontsource), bukan CDN, supaya dashboard tetap
+   tampil benar tanpa koneksi keluar.
+   ========================================================================== */
+@import '@fontsource/unbounded/700.css';
+@import '@fontsource/unbounded/800.css';
+@import '@fontsource/unbounded/900.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/inter/800.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/600.css';
+@import '@fontsource/jetbrains-mono/700.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   SISTEM DESAIN "DISPATCH CONSOLE"
+   Nilai diambil langsung dari /design-reference/web-dashboard-*.html.
+   JANGAN diubah tanpa memperbarui mockup-nya juga.
+   ========================================================================== */
+
+:root {
+  /* --- Mode terang ------------------------------------------------------ */
+  --paper: #f2f5f3;
+  --surface: #ffffff;
+  --surface-2: #ffffff;
+  --map-bg: #e4ede9;
+
+  --border-subtle: rgb(10 20 15 / 0.07);
+  --border-strong: rgb(10 20 15 / 0.14);
+  --divider: rgb(10 20 15 / 0.06);
+
+  /* Hijau di-DEEPEN untuk mode terang (#39E991 -> #0F9D6E), bukan di-invert.
+     Nilai gelap tidak akan terbaca di atas latar terang. */
+  --vital: #0f9d6e;
+  --vital-tint: rgb(15 157 110 / 0.1);
+  --vital-border: rgb(15 157 110 / 0.22);
+  --on-vital: #04140c;
+
+  /* Gradien hijau IDENTIK di kedua mode — ini warna brand, bukan warna latar. */
+  --vital-gradient: linear-gradient(135deg, #39e991, #0ea972);
+  --vital-shadow: 0 6px 14px rgb(15 157 110 / 0.22);
+
+  /* Merah HANYA untuk SOS, batal, dan status darurat. */
+  --siren: #e11d48;
+  --siren-raw: #ff3355;
+  --siren-tint: rgb(255 51 85 / 0.1);
+
+  --amber: #ffb020;
+  --amber-text: #b45309;
+  --amber-tint: rgb(255 176 32 / 0.15);
+
+  --text-primary: #0a0e14;
+  --text-secondary: rgb(10 14 20 / 0.45);
+  --text-tertiary: rgb(10 14 20 / 0.35);
+
+  /* Ungu = pembeda level akses Panel Admin. */
+  --admin: #9333ea;
+  --admin-deep: #6d28d9;
+  --admin-active: #7c3aed;
+  --admin-tint: rgb(147 51 234 / 0.12);
+  --admin-border: rgb(147 51 234 / 0.25);
+
+  --shadow-card: 0 4px 14px rgb(10 20 15 / 0.03);
+  --shadow-raised: 0 8px 18px rgb(10 20 15 / 0.05);
+
+  /* Garis pindai halus — tekstur "konsol" yang ada di seluruh mockup. */
+  --scanline: rgb(15 157 110 / 0.02);
+  --map-line: rgb(15 157 110 / 0.14);
+  --map-line-soft: rgb(15 157 110 / 0.08);
+  --map-scan: rgb(15 157 110 / 0.04);
+}
+
+.dark {
+  /* --- Mode gelap (dasar & signature) ----------------------------------- */
+  --paper: #0a0e14;
+  --surface: rgb(255 255 255 / 0.03);
+  --surface-2: rgb(255 255 255 / 0.04);
+  --map-bg: #0d131e;
+
+  --border-subtle: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.14);
+  --divider: rgb(255 255 255 / 0.06);
+
+  --vital: #39e991;
+  --vital-tint: rgb(57 233 145 / 0.12);
+  --vital-border: rgb(57 233 145 / 0.2);
+  --on-vital: #04140c;
+
+  --vital-gradient: linear-gradient(135deg, #39e991, #0ea972);
+  --vital-shadow: 0 6px 14px rgb(57 233 145 / 0.25);
+
+  --siren: #ff3355;
+  --siren-raw: #ff3355;
+  --siren-tint: rgb(255 51 85 / 0.12);
+
+  --amber: #ffb020;
+  --amber-text: #ffb020;
+  --amber-tint: rgb(255 176 32 / 0.12);
+
+  --text-primary: #f4f6f8;
+  --text-secondary: rgb(244 246 248 / 0.4);
+  --text-tertiary: rgb(244 246 248 / 0.3);
+
+  --admin: #9333ea;
+  --admin-deep: #6d28d9;
+  --admin-active: #c084fc;
+  --admin-tint: rgb(147 51 234 / 0.12);
+  --admin-border: rgb(147 51 234 / 0.25);
+
+  --shadow-card: none;
+  --shadow-raised: none;
+
+  --scanline: rgb(57 233 145 / 0.018);
+  --map-line: rgb(57 233 145 / 0.08);
+  --map-line-soft: rgb(57 233 145 / 0.05);
+  --map-scan: rgb(57 233 145 / 0.025);
+}
+
+/* Sidebar punya latar solid sendiri di kedua mode. */
+:root {
+  --sidebar: #ffffff;
+}
+.dark {
+  --sidebar: #0d131e;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-sidebar: var(--sidebar);
+  --color-map-bg: var(--map-bg);
+
+  --color-vital: var(--vital);
+  --color-vital-tint: var(--vital-tint);
+  --color-on-vital: var(--on-vital);
+
+  --color-siren: var(--siren);
+  --color-siren-raw: var(--siren-raw);
+  --color-siren-tint: var(--siren-tint);
+
+  --color-amber: var(--amber);
+  --color-amber-text: var(--amber-text);
+  --color-amber-tint: var(--amber-tint);
+
+  --color-admin: var(--admin);
+  --color-admin-deep: var(--admin-deep);
+  --color-admin-active: var(--admin-active);
+  --color-admin-tint: var(--admin-tint);
+
+  --color-ink: var(--text-primary);
+  --color-ink-2: var(--text-secondary);
+  --color-ink-3: var(--text-tertiary);
+
+  --color-line: var(--border-subtle);
+  --color-line-strong: var(--border-strong);
+  --color-divider: var(--divider);
+
+  --font-display: 'Unbounded', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ==========================================================================
+   Dasar
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--paper);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tekstur garis pindai — dipasang di shell aplikasi, bukan di body, supaya
+   halaman login juga bisa memakainya secara terpisah. */
+.console-surface {
+  background-image: repeating-linear-gradient(
+    0deg,
+    var(--scanline) 0px,
+    var(--scanline) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* ==========================================================================
+   Komponen — kelas utilitas yang dipakai berulang di banyak halaman
+   ========================================================================== */
+
+/* Label mono huruf kapital — "suara" khas readout konsol. */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.mono-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.card-surface {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+}
+
+.btn-vital {
+  background: var(--vital-gradient);
+  color: var(--on-vital);
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: var(--vital-shadow);
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+.btn-vital:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+.btn-vital:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn-vital:disabled {
+  opacity: 0.5;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.btn-outline-console {
+  background: var(--surface-2);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 9px;
+  padding: 7px 13px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: background 0.15s ease;
+}
+.btn-outline-console:hover:not(:disabled) {
+  border-color: var(--vital-border);
+  color: var(--vital);
+}
+
+/* Peta konsol fallback — tekstur ini yang digambar mockup, jadi tampilannya
+   memang begini secara desain, bukan sekadar placeholder darurat. */
+.console-map {
+  background-color: var(--map-bg);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      var(--map-scan) 0px,
+      var(--map-scan) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    linear-gradient(
+      120deg,
+      transparent 48%,
+      var(--map-line) 48%,
+      var(--map-line) 51%,
+      transparent 51%
+    ),
+    linear-gradient(
+      20deg,
+      transparent 60%,
+      var(--map-line-soft) 60%,
+      var(--map-line-soft) 63%,
+      transparent 63%
+    );
+}
+
+/* Denyut lembut untuk kartu SOS yang belum direspons — menarik mata tanpa
+   berkedip mengganggu di ruang IGD. */
+@keyframes sos-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(255 51 85 / 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgb(255 51 85 / 0);
+  }
+}
+.sos-pending {
+  animation: sos-pulse 2s ease-out infinite;
+}
+
+@keyframes live-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.live-dot {
+  animation: live-blink 1.6s ease-in-out infinite;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}

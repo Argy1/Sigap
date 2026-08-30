@@ -123,8 +123,10 @@ export interface NearbyDriver {
   straightMeters: number | null;
   distanceMeters: number | null;
   durationSeconds: number | null;
-  /** False kalau sopir belum pernah mengirim posisi / posisinya sudah basi. */
+  /** False kalau sopir belum pernah mengirim posisi ATAU posisinya sudah basi. */
   hasFreshLocation: boolean;
+  /** Kapan posisi terakhir dikirim — biar UI bisa bilang "posisi 12 menit lalu". */
+  locationUpdatedAt: string | null;
 }
 
 interface DriverRow {
@@ -138,6 +140,7 @@ interface DriverRow {
   lng: string | number | null;
   straight_m: string | number | null;
   is_fresh: boolean;
+  location_updated_at: Date | null;
 }
 
 /**
@@ -169,7 +172,8 @@ export async function findNearestDrivers(
       CASE WHEN d.current_location IS NULL THEN NULL
            ELSE ST_Distance(d.current_location, ${POINT_SQL}) END AS straight_m,
       (d.current_location IS NOT NULL
-        AND d.location_updated_at > now() - make_interval(secs => $4)) AS is_fresh
+        AND d.location_updated_at > now() - make_interval(secs => $4)) AS is_fresh,
+      d.location_updated_at
     FROM drivers d
     JOIN profiles p ON p.id = d.profile_id
     WHERE d.hospital_id = $3
@@ -196,6 +200,7 @@ export async function findNearestDrivers(
     lng: r.lng === null ? null : Number(r.lng),
     straightMeters: r.straight_m === null ? null : Math.round(Number(r.straight_m)),
     hasFreshLocation: r.is_fresh,
+    locationUpdatedAt: r.location_updated_at ? r.location_updated_at.toISOString() : null,
   }));
 
   // Hanya sopir yang punya koordinat yang bisa di-refine.
