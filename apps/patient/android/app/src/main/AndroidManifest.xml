@@ -1,6 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ====================================================================
+         Izin yang benar-benar dipakai aplikasi ini.
+
+         INTERNET wajib ditulis di sini: Flutter menambahkannya otomatis hanya
+         pada build debug, jadi tanpa baris ini build RELEASE tidak bisa
+         menghubungi backend sama sekali.
+
+         Lokasi adalah satu-satunya masukan wajib untuk SOS — tanpa izin ini
+         seluruh aplikasi kehilangan gunanya.
+         ==================================================================== -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
-        android:label="patient_app"
+        android:label="Ambulans Bogor"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -30,6 +47,15 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- Google Maps API key.
+             Dibiarkan KOSONG dengan sengaja: tanpa key, aplikasi memakai
+             ConsoleMap (peta skematik bergaya mockup) dan tetap berjalan
+             penuh. Isi placeholder ini kalau ingin memakai Google Maps
+             sungguhan — lihat README bagian "Google Maps (opsional)". -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
