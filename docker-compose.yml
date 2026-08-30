@@ -1,0 +1,34 @@
+# Jaring pengaman untuk pengembangan lokal.
+#
+# Database utama proyek ini ada di Railway (lihat backend/.env). File ini
+# disediakan supaya pengembangan tetap bisa jalan saat offline atau saat Railway
+# bermasalah — cukup ubah DATABASE_URL di backend/.env ke baris yang tertera
+# di bawah, lalu `npm run migrate && npm run seed`.
+#
+#   docker compose up -d
+#   DATABASE_URL=postgresql://ambulans:ambulans@localhost:5433/ambulans
+#
+# Perhatikan image-nya: postgis/postgis, BUKAN postgres biasa. Image postgres
+# standar tidak punya ekstensi PostGIS, jadi migration 001 akan langsung gagal.
+
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    container_name: ambulans-postgis
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ambulans
+      POSTGRES_PASSWORD: ambulans
+      POSTGRES_DB: ambulans
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgis-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ambulans -d ambulans']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgis-data:

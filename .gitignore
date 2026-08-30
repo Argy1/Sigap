@@ -1,0 +1,60 @@
+# ---------- Node ----------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+dist/
+coverage/
+
+# ---------- Next.js ----------
+.next/
+out/
+.vercel/
+next-env.d.ts
+*.tsbuildinfo
+
+# ---------- Environment ----------
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ---------- Flutter / Dart ----------
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+pubspec_overrides.yaml
+*.g.dart.lock
+
+# Android
+apps/*/android/.gradle/
+apps/*/android/app/debug/
+apps/*/android/app/profile/
+apps/*/android/app/release/
+apps/*/android/local.properties
+apps/*/android/key.properties
+*.jks
+*.keystore
+
+# iOS
+apps/*/ios/Pods/
+apps/*/ios/.symlinks/
+apps/*/ios/Flutter/Flutter.framework
+apps/*/ios/Flutter/Flutter.podspec
+apps/*/ios/Flutter/App.framework
+apps/*/ios/Flutter/ephemeral/
+
+# ---------- Editor / OS ----------
+.idea/
+.vscode/*
+!.vscode/settings.json
+*.iml
+.DS_Store
+Thumbs.db
+
+# ---------- Misc ----------
+*.log
+tmp/

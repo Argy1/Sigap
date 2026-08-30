@@ -1,0 +1,18 @@
+# Root pub workspace — Aplikasi Panggilan Darurat Ambulans (Kota Bogor)
+#
+# Dart 3.6+ mendukung pub workspaces secara native; Melos 7 dibangun di atasnya.
+# Satu `flutter pub get` dari root menyelesaikan dependensi ketiga package Flutter.
+name: ambulans_workspace
+description: Monorepo workspace untuk App Pasien, App Sopir, dan package bersama mobile_core.
+publish_to: none
+
+environment:
+  sdk: ^3.11.0
+
+workspace:
+  - apps/patient
+  - apps/driver
+  - packages/mobile-core
+
+dev_dependencies:
+  melos: ^7.1.0

@@ -1,0 +1,44 @@
+{
+  "name": "ambulans-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "REST API + WebSocket untuk aplikasi panggilan darurat ambulans Kota Bogor",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "migrate": "tsx src/db/migrate.ts up",
+    "migrate:status": "tsx src/db/migrate.ts status",
+    "seed": "tsx src/db/seed.ts",
+    "db:reset": "tsx src/db/migrate.ts reset && tsx src/db/seed.ts",
+    "typecheck": "tsc --noEmit",
+    "test:rbac": "tsx src/tests/rbac.audit.ts",
+    "test:goldenpath": "tsx src/tests/golden-path.ts"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.1",
+    "pg": "^8.16.3",
+    "socket.io": "^4.8.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.7.0",
+    "@types/pg": "^8.15.5",
+    "socket.io-client": "^4.8.3",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

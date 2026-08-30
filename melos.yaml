@@ -1,0 +1,47 @@
+name: ambulans
+
+command:
+  bootstrap:
+    environment:
+      sdk: ^3.11.0
+
+scripts:
+  analyze:
+    description: Jalankan dart analyze di seluruh package.
+    run: dart analyze --fatal-infos
+    exec:
+      concurrency: 1
+
+  format:
+    description: Format seluruh kode Dart.
+    run: dart format --set-exit-if-changed .
+
+  fix:
+    description: Terapkan dart fix otomatis.
+    run: dart fix --apply
+    exec:
+      concurrency: 1
+
+  gen:
+    description: Jalankan build_runner (freezed / json_serializable) di package yang butuh.
+    run: dart run build_runner build --delete-conflicting-outputs
+    exec:
+      concurrency: 1
+    packageFilters:
+      dependsOn: build_runner
+
+  run:patient:
+    description: Jalankan App Pasien.
+    run: flutter run
+    exec:
+      concurrency: 1
+    packageFilters:
+      scope: patient_app
+
+  run:driver:
+    description: Jalankan App Sopir.
+    run: flutter run
+    exec:
+      concurrency: 1
+    packageFilters:
+      scope: driver_app
