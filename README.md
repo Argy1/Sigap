@@ -34,6 +34,7 @@ docs/               Project charter
 |---|---|---|
 | Backend REST + Socket.io | **live di Railway** | `https://sigap-backend-production-d4c1.up.railway.app` |
 | Database PostgreSQL 16 + PostGIS 3.4 | **live di Railway** | privat (service `postgis`) |
+| Dashboard Web | **live di Vercel** | https://sigap-dashboard-nu.vercel.app |
 | Repositori | GitHub | https://github.com/Argy1/Sigap |
 | APK Sigap & Sigap Sopir | ter-build, menunjuk backend Railway | `apps/*/build/app/outputs/flutter-apk/app-release.apk` |
 
@@ -46,6 +47,13 @@ curl https://sigap-backend-production-d4c1.up.railway.app/health
 Backend di-deploy otomatis dari branch `main` (root directory `/backend`).
 Setiap push yang menyentuh `backend/**` memicu build ulang, dan migration
 dijalankan otomatis saat start (`node dist/db/migrate.js up`).
+
+Dashboard di-deploy otomatis dari branch `main` (root directory
+`apps/web-dashboard`) lewat integrasi Git Vercel — setiap push memicu build
+baru. `NEXT_PUBLIC_API_URL` sudah menunjuk backend Railway lewat
+`apps/web-dashboard/.env.production` (nilainya bukan rahasia, sengaja
+di-commit — lihat komentar di berkas itu). Backend mengizinkan origin Vercel
+lewat `CORS_ORIGINS` di variabel environment Railway.
 
 ---
 
@@ -75,8 +83,11 @@ curl "http://localhost:4000/api/hospitals/nearest?lat=-6.5971&lng=106.8060"
 ```bash
 cd apps/web-dashboard
 npm install
-cp .env.example .env.local   # isi NEXT_PUBLIC_API_URL
+cp .env.example .env.local   # isi NEXT_PUBLIC_API_URL untuk pengembangan lokal
 npm run dev                  # http://localhost:3000
+
+# .env.production (sudah ter-commit) dipakai otomatis saat `npm run build`
+# untuk deploy — tidak perlu diisi manual di dashboard Vercel.
 ```
 
 ### 3. App Pasien & App Sopir
