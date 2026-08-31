@@ -95,8 +95,22 @@ async function onConnection(socket: Socket): Promise<void> {
       break;
     }
     case 'driver': {
-      if (auth.driverId) await socket.join(driverRoom(auth.driverId));
-      if (auth.hospitalId) await socket.join(hospitalRoom(auth.hospitalId));
+      if (!auth.driverId) break;
+      await socket.join(driverRoom(auth.driverId));
+
+      // PENTING: sopir TIDAK boleh join room rumah sakit.
+      //
+      // Room RS menyiarkan setiap SOS milik RS itu — lengkap dengan nama,
+      // nomor HP, alamat, dan data medis pasien. Sopir hanya berhak atas
+      // panggilan yang ditugaskan kepadanya, jadi dia hanya join room
+      // panggilan-panggilan itu saja.
+      const assigned = await query<{ id: string }>(
+        `SELECT id FROM emergency_calls
+         WHERE driver_id = $1
+           AND status IN ('pending','confirmed','en_route','arrived')`,
+        [auth.driverId],
+      );
+      for (const row of assigned.rows) await socket.join(callRoom(row.id));
       break;
     }
     case 'admin': {

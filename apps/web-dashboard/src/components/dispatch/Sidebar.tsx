@@ -124,7 +124,7 @@ export function Sidebar() {
             {isAdmin ? 'Admin Panel' : 'Portal RS'}
           </div>
           <div className="truncate font-mono text-[8px] uppercase tracking-[0.04em] text-[var(--text-secondary)]">
-            {isAdmin ? 'Platform Ambulans Bogor' : (user?.hospitalName ?? '—')}
+            {isAdmin ? 'Sigap · Platform Ambulans' : (user?.hospitalName ?? '—')}
           </div>
         </div>
       </div>

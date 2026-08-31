@@ -15,9 +15,9 @@ class TokenStorage {
 
   final FlutterSecureStorage _s;
 
-  static const _kAccess = 'ambulans.access';
-  static const _kRefresh = 'ambulans.refresh';
-  static const _kCall = 'ambulans.callToken';
+  static const _kAccess = 'sigap.access';
+  static const _kRefresh = 'sigap.refresh';
+  static const _kCall = 'sigap.callToken';
 
   Future<String?> readAccess() => _s.read(key: _kAccess);
   Future<String?> readRefresh() => _s.read(key: _kRefresh);

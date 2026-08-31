@@ -1,4 +1,4 @@
-name: ambulans
+name: sigap
 
 command:
   bootstrap:
@@ -36,7 +36,7 @@ scripts:
     exec:
       concurrency: 1
     packageFilters:
-      scope: patient_app
+      scope: sigap_patient
 
   run:driver:
     description: Jalankan App Sopir.
@@ -44,4 +44,4 @@ scripts:
     exec:
       concurrency: 1
     packageFilters:
-      scope: driver_app
+      scope: sigap_driver

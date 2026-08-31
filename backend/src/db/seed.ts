@@ -208,7 +208,7 @@ async function main(): Promise<void> {
   await upsertProfile({
     role: 'admin',
     fullName: 'Admin Platform',
-    email: 'admin@ambulans.id',
+    email: 'admin@sigap.id',
   });
 
   // --- Staff RS -------------------------------------------------------------
@@ -270,7 +270,7 @@ async function main(): Promise<void> {
   console.log('  ┌──────────────────────────────────────────────────────────────┐');
   console.log('  │  AKUN DEMO — kata sandi semuanya: password123                │');
   console.log('  ├──────────────────────────────────────────────────────────────┤');
-  console.log('  │  Admin        admin@ambulans.id                              │');
+  console.log('  │  Admin        admin@sigap.id                              │');
   console.log('  │  Staff RSUD   staff@rsudbogor.id                             │');
   console.log('  │  Staff PMI    staff@rspmibogor.id                            │');
   console.log('  │  Sopir        081211110001  (Ahmad Ridwan, RSUD)             │');

@@ -1,4 +1,6 @@
-# Aplikasi Panggilan Darurat Ambulans — Kota Bogor
+# Sigap — Aplikasi Panggilan Darurat Ambulans
+
+**Kota Bogor**
 
 Tugas akhir Sistem Informasi Geografis · D4 Teknologi Rekayasa Perangkat Lunak
 · Sekolah Vokasi IPB University.
@@ -14,9 +16,9 @@ tanpa pasien perlu menyebutkan alamat sama sekali.
 
 ```
 apps/
-  patient/          Flutter — App Pasien (7 layar)
-  driver/           Flutter — App Sopir Ambulans (5 layar + Akun)
-  web-dashboard/    Next.js — Dashboard RS & Panel Admin
+  patient/          Flutter — Sigap (App Pasien, 7 layar)
+  driver/           Flutter — Sigap Sopir (5 layar + Akun)
+  web-dashboard/    Next.js — Sigap Console (Dashboard RS & Panel Admin)
 packages/
   mobile-core/      Package Flutter bersama: sistem desain, model, API, realtime
 backend/            Node.js + Express — REST API + Socket.io
@@ -99,7 +101,7 @@ Seluruh akun memakai kata sandi **`password123`**.
 | Sopir | App Sopir | `081211110001` (Ahmad Ridwan, RSUD Kota Bogor) |
 | Staff RS | Dashboard Web | `staff@rsudbogor.id` |
 | Staff RS lain | Dashboard Web | `staff@rspmibogor.id` (untuk menguji isolasi antar-RS) |
-| Admin platform | Dashboard Web | `admin@ambulans.id` |
+| Admin platform | Dashboard Web | `admin@sigap.id` |
 
 Mode tamu tidak butuh akun sama sekali — tombol "MASUK MODE TAMU" di layar
 pertama App Pasien.
@@ -125,8 +127,11 @@ pertama App Pasien.
 # Backend: alur SOS lengkap lintas socket, termasuk mode tamu
 cd backend && npm run test:goldenpath     # 30 pemeriksaan
 
-# Backend: audit kebocoran akses antar RS / antar role
+# Backend: audit kebocoran akses antar RS / antar role (HTTP)
 cd backend && npm run test:rbac           # 33 pemeriksaan
+
+# Backend: audit kebocoran lewat Socket.io
+cd backend && npm run test:socket         # 11 pemeriksaan
 
 # Flutter: uji golden sistem desain + perilaku tombol SOS
 cd packages/mobile-core && flutter test   # 13 uji, 8 di antaranya golden
@@ -178,7 +183,7 @@ Butuh database lokal (offline / Railway bermasalah)? Tersedia PostGIS lokal:
 ```bash
 docker compose up -d
 # lalu di backend/.env:
-# DATABASE_URL=postgresql://ambulans:ambulans@localhost:5433/ambulans
+# DATABASE_URL=postgresql://sigap:sigap@localhost:5433/sigap
 npm run migrate && npm run seed
 ```
 

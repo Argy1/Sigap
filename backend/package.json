@@ -1,5 +1,5 @@
 {
-  "name": "ambulans-backend",
+  "name": "sigap-backend",
   "version": "1.0.0",
   "private": true,
   "description": "REST API + WebSocket untuk aplikasi panggilan darurat ambulans Kota Bogor",
@@ -17,7 +17,8 @@
     "db:reset": "tsx src/db/migrate.ts reset && tsx src/db/seed.ts",
     "typecheck": "tsc --noEmit",
     "test:rbac": "tsx src/tests/rbac.audit.ts",
-    "test:goldenpath": "tsx src/tests/golden-path.ts"
+    "test:goldenpath": "tsx src/tests/golden-path.ts",
+    "test:socket": "tsx src/tests/socket.audit.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

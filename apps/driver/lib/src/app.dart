@@ -5,7 +5,7 @@ import 'package:mobile_core/mobile_core.dart';
 import 'screens/driver_login_screen.dart';
 import 'screens/driver_shell.dart';
 
-/// App Sopir Ambulans — memakai sistem desain yang sama persis dengan App
+/// **Sigap Sopir** — memakai sistem desain yang sama persis dengan App
 /// Pasien, seluruhnya lewat package `mobile_core`. Tidak ada satu pun warna
 /// atau widget yang didefinisikan ulang di sini.
 class DriverApp extends ConsumerWidget {
@@ -16,7 +16,7 @@ class DriverApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp(
-      title: 'Sopir Ambulans Bogor',
+      title: 'Sigap Sopir',
       debugShowCheckedModeBanner: false,
       themeMode: themeMode,
       theme: buildDispatchTheme(Brightness.light),

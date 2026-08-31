@@ -20,8 +20,8 @@ import type {
  * cookie httpOnly lewat route handler Next.js.
  */
 
-const ACCESS_KEY = 'ambulans.accessToken';
-const REFRESH_KEY = 'ambulans.refreshToken';
+const ACCESS_KEY = 'sigap.accessToken';
+const REFRESH_KEY = 'sigap.refreshToken';
 
 let accessToken: string | null = null;
 

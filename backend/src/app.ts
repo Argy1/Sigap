@@ -24,7 +24,7 @@ export function createApp() {
   app.get('/health', (_req, res) => {
     res.json({
       ok: true,
-      service: 'ambulans-backend',
+      service: 'sigap-backend',
       env: env.NODE_ENV,
       // Menunjukkan apakah Google Maps aktif atau sedang memakai fallback.
       routing: routingMode(),

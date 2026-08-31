@@ -5,7 +5,7 @@ import { AuthProvider } from '@/components/AuthProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Dispatch Console — Ambulans Bogor',
+  title: 'Sigap — Dispatch Console',
   description:
     'Dashboard rumah sakit & admin untuk sistem panggilan darurat ambulans Kota Bogor.',
 };

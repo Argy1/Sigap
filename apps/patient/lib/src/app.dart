@@ -5,7 +5,7 @@ import 'package:mobile_core/mobile_core.dart';
 import 'screens/auth_screen.dart';
 import 'screens/home_shell.dart';
 
-/// App Pasien — "Dispatch Console".
+/// **Sigap** — App Pasien.
 ///
 /// Mode GELAP adalah default. Bukan mengikuti setelan sistem: sistem desain ini
 /// dirancang gelap sebagai dasar, dan layar darurat yang menyala terang di
@@ -18,7 +18,7 @@ class PatientApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp(
-      title: 'Ambulans Bogor',
+      title: 'Sigap',
       debugShowCheckedModeBanner: false,
       themeMode: themeMode,
       theme: buildDispatchTheme(Brightness.light),

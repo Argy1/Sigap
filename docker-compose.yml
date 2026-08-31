@@ -6,7 +6,7 @@
 # di bawah, lalu `npm run migrate && npm run seed`.
 #
 #   docker compose up -d
-#   DATABASE_URL=postgresql://ambulans:ambulans@localhost:5433/ambulans
+#   DATABASE_URL=postgresql://sigap:sigap@localhost:5433/sigap
 #
 # Perhatikan image-nya: postgis/postgis, BUKAN postgres biasa. Image postgres
 # standar tidak punya ekstensi PostGIS, jadi migration 001 akan langsung gagal.
@@ -14,18 +14,18 @@
 services:
   postgis:
     image: postgis/postgis:16-3.4
-    container_name: ambulans-postgis
+    container_name: sigap-postgis
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ambulans
-      POSTGRES_PASSWORD: ambulans
-      POSTGRES_DB: ambulans
+      POSTGRES_USER: sigap
+      POSTGRES_PASSWORD: sigap
+      POSTGRES_DB: sigap
     ports:
       - '5433:5432'
     volumes:
       - postgis-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ambulans -d ambulans']
+      test: ['CMD-SHELL', 'pg_isready -U sigap -d sigap']
       interval: 10s
       timeout: 5s
       retries: 5

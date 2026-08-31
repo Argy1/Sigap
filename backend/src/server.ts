@@ -10,7 +10,7 @@ initSockets(httpServer);
 
 httpServer.listen(env.PORT, () => {
   console.log('');
-  console.log('  Ambulans Bogor — Backend');
+  console.log('  Sigap — Backend');
   console.log(`  REST      : http://localhost:${env.PORT}/api`);
   console.log(`  Socket.io : ws://localhost:${env.PORT}`);
   console.log(`  Health    : http://localhost:${env.PORT}/health`);

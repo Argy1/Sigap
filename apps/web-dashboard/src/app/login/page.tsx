@@ -135,7 +135,7 @@ export default function LoginPage() {
           <div className="space-y-1 font-mono text-[9px] text-[var(--text-secondary)]">
             <div>staff@rsudbogor.id — Staff RSUD Kota Bogor</div>
             <div>staff@rspmibogor.id — Staff RS PMI Bogor</div>
-            <div>admin@ambulans.id — Admin platform</div>
+            <div>admin@sigap.id — Admin platform</div>
           </div>
         </div>
       </div>

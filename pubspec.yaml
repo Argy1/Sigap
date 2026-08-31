@@ -2,7 +2,7 @@
 #
 # Dart 3.6+ mendukung pub workspaces secara native; Melos 7 dibangun di atasnya.
 # Satu `flutter pub get` dari root menyelesaikan dependensi ketiga package Flutter.
-name: ambulans_workspace
+name: sigap_workspace
 description: Monorepo workspace untuk App Pasien, App Sopir, dan package bersama mobile_core.
 publish_to: none
 

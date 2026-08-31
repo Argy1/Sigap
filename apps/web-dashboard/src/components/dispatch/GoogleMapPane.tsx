@@ -59,7 +59,7 @@ export function GoogleMapPane({
           disableDefaultUI
           zoomControl
           colorScheme={resolvedTheme === 'dark' ? 'DARK' : 'LIGHT'}
-          mapId="ambulans-dispatch"
+          mapId="sigap-dispatch"
         >
           {origin && (
             <AdvancedMarker position={origin} title="Rumah sakit Anda">

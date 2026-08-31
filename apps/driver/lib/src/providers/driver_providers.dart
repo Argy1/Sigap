@@ -50,7 +50,14 @@ class CurrentAssignmentNotifier extends Notifier<EmergencyCall?> {
   EmergencyCall? build() {
     final socket = ref.watch(socketServiceProvider);
 
-    _assignmentSub = socket.assignments.listen((call) => state = call);
+    _assignmentSub = socket.assignments.listen((call) {
+      state = call;
+      // Langsung ikut memantau room panggilan ini. Sopir sengaja TIDAK di-join
+      // ke room rumah sakit (itu akan membocorkan seluruh SOS milik RS), jadi
+      // room panggilan inilah satu-satunya jalur dia menerima perubahan status
+      // — termasuk kalau pasien membatalkan saat dia masih menimbang.
+      socket.watchCall(call.id);
+    });
 
     _updateSub = socket.callUpdates.listen((call) {
       if (state != null && call.id == state!.id) {

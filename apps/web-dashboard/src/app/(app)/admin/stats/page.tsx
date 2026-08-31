@@ -81,7 +81,7 @@ export default function AdminStatsPage() {
     <>
       <TopBar
         title="Statistik Sistem"
-        subtitle="Ringkasan seluruh platform ambulans Kota Bogor"
+        subtitle="Ringkasan seluruh platform Sigap — Kota Bogor"
       />
 
       <div className="mb-4 flex flex-wrap gap-3.5">

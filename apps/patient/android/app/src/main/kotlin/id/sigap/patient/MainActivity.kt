@@ -1,4 +1,4 @@
-package com.ipb.ambulans.driver_app
+package id.sigap.patient
 
 import io.flutter.embedding.android.FlutterActivity
 
