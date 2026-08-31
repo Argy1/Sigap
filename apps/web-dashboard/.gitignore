@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# Pengecualian: nilai ini bukan rahasia — lihat komentar di dalam berkasnya.
+# Vercel butuh berkas ini ter-commit supaya NEXT_PUBLIC_API_URL ter-inline
+# saat build tanpa perlu diisi manual lewat dashboard Vercel.
+!.env.production
 
 # vercel
 .vercel
