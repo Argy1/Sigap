@@ -28,6 +28,27 @@ docs/               Project charter
 
 ---
 
+## Lingkungan yang sudah berjalan
+
+| Bagian | Status | Alamat |
+|---|---|---|
+| Backend REST + Socket.io | **live di Railway** | `https://sigap-backend-production-d4c1.up.railway.app` |
+| Database PostgreSQL 16 + PostGIS 3.4 | **live di Railway** | privat (service `postgis`) |
+| Repositori | GitHub | https://github.com/Argy1/Sigap |
+| APK Sigap & Sigap Sopir | ter-build, menunjuk backend Railway | `apps/*/build/app/outputs/flutter-apk/app-release.apk` |
+
+Cek backend hidup:
+
+```bash
+curl https://sigap-backend-production-d4c1.up.railway.app/health
+```
+
+Backend di-deploy otomatis dari branch `main` (root directory `/backend`).
+Setiap push yang menyentuh `backend/**` memicu build ulang, dan migration
+dijalankan otomatis saat start (`node dist/db/migrate.js up`).
+
+---
+
 ## Menjalankan proyek
 
 Prasyarat: **Node.js ≥ 20**, **Flutter ≥ 3.41** (Dart 3.11), dan Git.
@@ -54,8 +75,8 @@ curl "http://localhost:4000/api/hospitals/nearest?lat=-6.5971&lng=106.8060"
 ```bash
 cd apps/web-dashboard
 npm install
-cp .env.example .env.local
-npm run dev               # http://localhost:3000
+cp .env.example .env.local   # isi NEXT_PUBLIC_API_URL
+npm run dev                  # http://localhost:3000
 ```
 
 ### 3. App Pasien & App Sopir
@@ -73,13 +94,30 @@ cd apps/patient && flutter run --dart-define-from-file=env.json
 cd apps/driver  && flutter run --dart-define-from-file=env.json
 ```
 
-Sesuaikan `API_URL` di `env.json` masing-masing app:
+`env.json` sudah menunjuk backend Railway, jadi kedua app langsung jalan tanpa
+perlu menyalakan backend lokal. Untuk pengembangan terhadap backend di laptop,
+pakai `env.local.json`:
+
+```bash
+flutter run --dart-define-from-file=env.local.json
+```
 
 | Target | Nilai `API_URL` |
 |---|---|
+| Produksi (bawaan `env.json`) | `https://sigap-backend-production-d4c1.up.railway.app` |
 | Emulator Android | `http://10.0.2.2:4000` (10.0.2.2 = localhost host) |
-| Perangkat Android fisik | `http://<IP-LAN-komputer>:4000` |
+| Perangkat Android fisik ke laptop | `http://<IP-LAN-komputer>:4000` |
 | Chrome / desktop | `http://localhost:4000` |
+
+### Pasang ke perangkat Android
+
+```bash
+cd apps/patient && flutter build apk --release --dart-define-from-file=env.json
+adb install -r build/app/outputs/flutter-apk/app-release.apk
+```
+
+Aplikasi terpasang sebagai **Sigap** (`id.sigap.patient`) dan **Sigap Sopir**
+(`id.sigap.driver`).
 
 Tersedia juga skrip Melos:
 

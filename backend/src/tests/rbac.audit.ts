@@ -56,7 +56,7 @@ const login = async (identifier: string) => {
 async function main(): Promise<void> {
   console.log('\n=== AUDIT RBAC — semua percobaan di bawah HARUS DITOLAK ===\n');
 
-  const admin = await login('admin@ambulans.id');
+  const admin = await login('admin@sigap.id');
   const staffA = await login('staff@rsudbogor.id'); // RSUD Kota Bogor
   const staffB = await login('staff@rspmibogor.id'); // RS PMI Bogor
   const driverA = await login('081211110001'); // sopir RSUD
