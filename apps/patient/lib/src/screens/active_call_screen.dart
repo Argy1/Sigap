@@ -160,19 +160,32 @@ class ActiveCallScreen extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                              Container(
-                                width: 32,
-                                height: 32,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: c.vitalTint,
-                                  border: Border.all(color: c.vitalBorder),
-                                ),
-                                child: Icon(
-                                  Icons.phone_rounded,
-                                  size: 14,
-                                  color: c.vital,
+                              Material(
+                                color: Colors.transparent,
+                                shape: const CircleBorder(),
+                                clipBehavior: Clip.antiAlias,
+                                child: InkWell(
+                                  onTap: call.driverPhone == null
+                                      ? null
+                                      : () => callPhoneNumber(
+                                            context,
+                                            call.driverPhone!,
+                                          ),
+                                  child: Container(
+                                    width: 32,
+                                    height: 32,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: c.vitalTint,
+                                      border: Border.all(color: c.vitalBorder),
+                                    ),
+                                    child: Icon(
+                                      Icons.phone_rounded,
+                                      size: 14,
+                                      color: c.vital,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],

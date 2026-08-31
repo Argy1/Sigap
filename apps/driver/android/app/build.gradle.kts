@@ -13,6 +13,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // Wajib untuk flutter_local_notifications (notifikasi lokal Sigap).
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -41,4 +43,9 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // Dibutuhkan oleh isCoreLibraryDesugaringEnabled di atas.
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

@@ -6,6 +6,37 @@ import 'package:mobile_core/mobile_core.dart';
 /// Provider khusus App Pasien.
 
 // ---------------------------------------------------------------------------
+// Notifikasi — kategori khusus App Pasien
+// ---------------------------------------------------------------------------
+
+/// Id kategori dipakai sebagai kunci di [NotificationPrefs.categories] DAN
+/// sebagai id notifikasi Android (lewat `.hashCode`) — nilainya harus stabil,
+/// jangan diubah begitu sudah dipakai (nanti preferensi lama yang tersimpan
+/// jadi tidak nyambung dengan kategori baru).
+const String kNotifCategoryAssigned = 'patient_assigned';
+const String kNotifCategoryArrived = 'patient_arrived';
+const String kNotifCategoryFinished = 'patient_finished';
+
+/// Daftar kategori yang dirender di `NotificationSettingsScreen`.
+const List<NotificationCategory> patientNotificationCategories = [
+  NotificationCategory(
+    id: kNotifCategoryAssigned,
+    label: 'Sopir Ditugaskan / Menuju Lokasi',
+    description: 'Saat rumah sakit menugaskan sopir dan saat sopir berangkat.',
+  ),
+  NotificationCategory(
+    id: kNotifCategoryArrived,
+    label: 'Ambulans Tiba di Lokasi',
+    description: 'Saat sopir mengonfirmasi sudah sampai di lokasi Anda.',
+  ),
+  NotificationCategory(
+    id: kNotifCategoryFinished,
+    label: 'Panggilan Selesai / Dibatalkan',
+    description: 'Saat penjemputan selesai atau panggilan dibatalkan.',
+  ),
+];
+
+// ---------------------------------------------------------------------------
 // RS terdekat
 // ---------------------------------------------------------------------------
 
@@ -47,7 +78,11 @@ class ActiveCallNotifier extends Notifier<EmergencyCall?> {
 
     _statusSub = socket.callUpdates.listen((call) {
       // Hanya terima pembaruan untuk panggilan yang sedang dipantau.
-      if (state != null && call.id == state!.id) state = call;
+      if (state != null && call.id == state!.id) {
+        final previousStatus = state!.status;
+        state = call;
+        _maybeNotify(previousStatus, call);
+      }
     });
 
     _locationSub = socket.driverLocations.listen((event) {
@@ -63,6 +98,57 @@ class ActiveCallNotifier extends Notifier<EmergencyCall?> {
     });
 
     return null;
+  }
+
+  /// Notifikasi lokal saat status panggilan benar-benar BERUBAH (bukan setiap
+  /// pesan socket — server bisa mengirim `call:status` walau isinya sama,
+  /// mis. saat posisi sopir diperbarui bersamaan).
+  ///
+  /// Notifikasi lokal saja: muncul selama app masih hidup (foreground atau
+  /// background), TIDAK sampai app di-*force-close* total — itu butuh push
+  /// FCM yang di luar cakupan revisi ini.
+  void _maybeNotify(CallStatus previous, EmergencyCall call) {
+    if (previous == call.status) return;
+
+    final String categoryId;
+    final String title;
+    final String body;
+
+    switch (call.status) {
+      case CallStatus.confirmed:
+      case CallStatus.enRoute:
+        categoryId = kNotifCategoryAssigned;
+        title = 'Sopir Menuju Lokasi Anda';
+        body = call.driverName != null
+            ? '${call.driverName} sedang menuju lokasi Anda (SOS #${call.callCode}).'
+            : 'Sopir ambulans sedang menuju lokasi Anda.';
+      case CallStatus.arrived:
+        categoryId = kNotifCategoryArrived;
+        title = 'Ambulans Telah Tiba';
+        body = 'Ambulans sudah tiba di lokasi Anda (SOS #${call.callCode}).';
+      case CallStatus.completed:
+      case CallStatus.cancelled:
+        categoryId = kNotifCategoryFinished;
+        title = call.status == CallStatus.completed
+            ? 'Panggilan Selesai'
+            : 'Panggilan Dibatalkan';
+        body = 'SOS #${call.callCode} telah '
+            '${call.status == CallStatus.completed ? 'selesai' : 'dibatalkan'}.';
+      case CallStatus.pending:
+        return; // Status awal — belum ada yang perlu diberitahukan.
+    }
+
+    final prefs = ref.read(notificationPrefsProvider);
+    if (!prefs.isCategoryEnabled(categoryId)) return;
+
+    // Id notifikasi tetap per kategori (bukan per panggilan) supaya
+    // notifikasi status yang baru MENGGANTI yang lama, bukan menumpuk —
+    // pengguna cuma peduli status TERKINI dari satu panggilan yang aktif.
+    ref.read(notificationServiceProvider).show(
+          id: categoryId.hashCode,
+          title: title,
+          body: body,
+        );
   }
 
   /// Pasang panggilan sebagai yang sedang dipantau, lalu minta socket ikut

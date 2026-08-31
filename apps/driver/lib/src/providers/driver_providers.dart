@@ -6,6 +6,30 @@ import 'package:mobile_core/mobile_core.dart';
 
 /// Provider khusus App Sopir.
 
+// ---------------------------------------------------------------------------
+// Notifikasi — kategori khusus App Sopir
+// ---------------------------------------------------------------------------
+
+/// Id kategori dipakai sebagai kunci di [NotificationPrefs.categories] DAN
+/// sebagai id notifikasi Android (lewat `.hashCode`) — nilainya harus stabil,
+/// jangan diubah begitu sudah dipakai.
+const String kNotifCategoryNewTask = 'driver_new_task';
+const String kNotifCategoryTaskCancelled = 'driver_task_cancelled';
+
+/// Daftar kategori yang dirender di `NotificationSettingsScreen`.
+const List<NotificationCategory> driverNotificationCategories = [
+  NotificationCategory(
+    id: kNotifCategoryNewTask,
+    label: 'Tugas Baru Masuk',
+    description: 'Saat rumah sakit menugaskan Anda ke sebuah panggilan.',
+  ),
+  NotificationCategory(
+    id: kNotifCategoryTaskCancelled,
+    label: 'Tugas Dibatalkan/Dialihkan',
+    description: 'Saat panggilan yang Anda tangani dibatalkan atau dialihkan.',
+  ),
+];
+
 /// Profil sopir yang sedang masuk (plat, status ketersediaan, RS).
 final driverProfileProvider = FutureProvider<DriverProfile>(
   (ref) => ref.watch(apiClientProvider).myDriverProfile(),
@@ -57,6 +81,12 @@ class CurrentAssignmentNotifier extends Notifier<EmergencyCall?> {
       // room panggilan inilah satu-satunya jalur dia menerima perubahan status
       // — termasuk kalau pasien membatalkan saat dia masih menimbang.
       socket.watchCall(call.id);
+      _notifyIfEnabled(
+        kNotifCategoryNewTask,
+        title: 'Tugas Baru Masuk',
+        body: 'SOS #${call.callCode} — ${call.patientName}. '
+            'Buka aplikasi untuk menerima atau menolak.',
+      );
     });
 
     _updateSub = socket.callUpdates.listen((call) {
@@ -72,8 +102,14 @@ class CurrentAssignmentNotifier extends Notifier<EmergencyCall?> {
 
     _cancelSub = socket.assignmentCancelled.listen((callId) {
       if (state?.id == callId) {
+        final cancelledCode = state!.callCode;
         state = null;
         ref.invalidate(driverProfileProvider);
+        _notifyIfEnabled(
+          kNotifCategoryTaskCancelled,
+          title: 'Tugas Dibatalkan',
+          body: 'SOS #$cancelledCode tidak lagi menjadi tugas Anda.',
+        );
       }
     });
 
@@ -85,6 +121,26 @@ class CurrentAssignmentNotifier extends Notifier<EmergencyCall?> {
 
     Future.microtask(restore);
     return null;
+  }
+
+  /// Notifikasi lokal — muncul selama app masih hidup (foreground atau
+  /// background), TIDAK sampai app di-*force-close* total. Cek preferensi
+  /// kategori dulu; kalau nonaktif, tidak ada apa pun yang terjadi.
+  void _notifyIfEnabled(
+    String categoryId, {
+    required String title,
+    required String body,
+  }) {
+    final prefs = ref.read(notificationPrefsProvider);
+    if (!prefs.isCategoryEnabled(categoryId)) return;
+
+    // Id notifikasi tetap per kategori supaya notifikasi baru MENGGANTI yang
+    // lama, bukan menumpuk.
+    ref.read(notificationServiceProvider).show(
+          id: categoryId.hashCode,
+          title: title,
+          body: body,
+        );
   }
 
   /// Muat tugas yang mungkin sedang berjalan — penting kalau aplikasi sopir

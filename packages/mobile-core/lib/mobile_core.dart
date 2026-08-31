@@ -21,6 +21,10 @@ export 'src/api/token_storage.dart';
 export 'src/realtime/events.dart';
 export 'src/realtime/socket_service.dart';
 
+// Notifikasi lokal (selama app hidup — lihat notification_service.dart)
+export 'src/notifications/notification_prefs.dart';
+export 'src/notifications/notification_service.dart';
+
 // Provider
 export 'src/providers/core_providers.dart';
 
@@ -35,3 +39,4 @@ export 'src/widgets/sos_hold_button.dart';
 // Utilitas
 export 'src/utils/format.dart';
 export 'src/utils/geo.dart';
+export 'src/utils/telephony.dart';

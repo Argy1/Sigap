@@ -120,6 +120,12 @@ class _IncomingTaskScreenState extends ConsumerState<IncomingTaskScreen> {
                             _Row(
                               label: 'KONTAK',
                               value: call.patientPhone ?? '—',
+                              onTap: call.patientPhone == null
+                                  ? null
+                                  : () => callPhoneNumber(
+                                        context,
+                                        call.patientPhone!,
+                                      ),
                             ),
                             _Row(
                               label: 'KONDISI',
@@ -193,23 +199,31 @@ class _IncomingTaskScreenState extends ConsumerState<IncomingTaskScreen> {
 }
 
 /// Baris label mono + nilai — pola `.pc-row` di mockup.
+///
+/// Kalau [onTap] diisi, seluruh baris jadi bisa disentuh (dipakai untuk
+/// KONTAK — membuka dialer ke nomor pasien) dan nilainya ditandai warna
+/// vital + ikon telepon supaya jelas ini bisa disentuh, bukan cuma teks.
 class _Row extends StatelessWidget {
   const _Row({
     required this.label,
     required this.value,
     this.valueColor,
     this.last = false,
+    this.onTap,
   });
 
   final String label;
   final String value;
   final Color? valueColor;
   final bool last;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return Padding(
+    final tappable = onTap != null;
+
+    final row = Padding(
       padding: EdgeInsets.only(bottom: last ? 0 : 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,18 +239,35 @@ class _Row extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              value,
-              textAlign: TextAlign.right,
-              style: DispatchType.bodyStyle(
-                size: 10,
-                weight: 700,
-                color: valueColor ?? c.textPrimary,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (tappable) ...[
+                  Icon(Icons.phone_rounded, size: 11, color: c.vital),
+                  const SizedBox(width: 5),
+                ],
+                Flexible(
+                  child: Text(
+                    value,
+                    textAlign: TextAlign.right,
+                    style: DispatchType.bodyStyle(
+                      size: 10,
+                      weight: 700,
+                      color: tappable ? c.vital : (valueColor ?? c.textPrimary),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
+    );
+
+    if (!tappable) return row;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(onTap: onTap, child: row),
     );
   }
 }

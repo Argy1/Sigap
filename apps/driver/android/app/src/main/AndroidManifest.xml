@@ -20,6 +20,11 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
+    <!-- Wajib di Android 13+ (SDK 33+) agar notifikasi lokal (tugas baru
+         masuk, tugas dibatalkan) benar-benar tampil. Diminta lazily di
+         halaman Pengaturan Notifikasi, bukan saat app pertama dibuka. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:label="Sigap Sopir"
         android:name="${applicationName}"
@@ -70,6 +75,12 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Wajib di Android 11+ (package visibility) agar url_launcher bisa
+             membuka aplikasi telepon dari tombol "Telepon Pasien". -->
+        <intent>
+            <action android:name="android.intent.action.DIAL"/>
+            <data android:scheme="tel"/>
         </intent>
     </queries>
 </manifest>

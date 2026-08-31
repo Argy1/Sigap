@@ -71,8 +71,13 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
     return Scaffold(
       body: ConsoleBackground(
+        // SafeArea default (bottom: true) sengaja dipakai: Android 15+ (target
+        // SDK 36 di sini) memaksa edge-to-edge dan tidak bisa di-opt-out. Kalau
+        // bottom di-set false, DispatchNavBar dirender sampai ke bawah gestur
+        // sistem dan tombolnya tidak bisa disentuh. ConsoleBackground tetap
+        // membungkus di luar SafeArea, jadi gradiennya tetap full-bleed —
+        // yang ter-inset cuma isi Column ini (termasuk nav bar).
         child: SafeArea(
-          bottom: false,
           child: Column(
             children: [
               Expanded(child: screens[safeTab]),

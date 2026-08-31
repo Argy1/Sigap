@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_core/mobile_core.dart';
 
 import '../providers/patient_providers.dart';
+import 'hospital_detail_screen.dart';
 
 /// **Layar 04 — Peta & RS Terdekat.**
 ///
@@ -180,78 +181,99 @@ class _HospitalRow extends StatelessWidget {
     final c = context.c;
     final isNearest = rank == 1;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 9),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: c.divider)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: isNearest
-                  ? c.vital.withValues(alpha: 0.15)
-                  : c.vital.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(Icons.add_rounded, size: 15, color: c.vital),
+    // Material+InkWell (bukan cuma GestureDetector) supaya ada umpan balik
+    // ripple saat disentuh — baris ini sekarang menuju halaman detail RS,
+    // bukan cuma informasi statis. Tetap TIDAK ada tombol "pilih RS ini
+    // untuk SOS" (lihat doc-comment MapScreen) — ini murni navigasi info.
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (_) => HospitalDetailScreen(hospital: hospital),
           ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  hospital.name,
-                  style: DispatchType.bodyStyle(
-                    size: 10,
-                    weight: 700,
-                    color: c.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 1),
-                Text(
-                  hospital.address.toUpperCase(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: DispatchType.monoStyle(
-                    size: 7.5,
-                    weight: 600,
-                    color: c.textSecondary,
-                  ),
-                ),
-              ],
-            ),
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 9),
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: c.divider)),
           ),
-          const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
+          child: Row(
             children: [
-              Text(
-                formatDistance(hospital.distanceMeters),
-                style: DispatchType.monoStyle(
-                  size: 10.5,
-                  weight: 700,
-                  color: c.vital,
-                  tracking: 0.02,
+              Container(
+                width: 28,
+                height: 28,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: isNearest
+                      ? c.vital.withValues(alpha: 0.15)
+                      : c.vital.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(Icons.add_rounded, size: 15, color: c.vital),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      hospital.name,
+                      style: DispatchType.bodyStyle(
+                        size: 10,
+                        weight: 700,
+                        color: c.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    Text(
+                      hospital.address.toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: DispatchType.monoStyle(
+                        size: 7.5,
+                        weight: 600,
+                        color: c.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                formatDuration(hospital.durationSeconds),
-                style: DispatchType.monoStyle(
-                  size: 7.5,
-                  weight: 600,
-                  color: c.textSecondary,
-                ),
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    formatDistance(hospital.distanceMeters),
+                    style: DispatchType.monoStyle(
+                      size: 10.5,
+                      weight: 700,
+                      color: c.vital,
+                      tracking: 0.02,
+                    ),
+                  ),
+                  Text(
+                    formatDuration(hospital.durationSeconds),
+                    style: DispatchType.monoStyle(
+                      size: 7.5,
+                      weight: 600,
+                      color: c.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 16,
+                color: c.textTertiary,
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

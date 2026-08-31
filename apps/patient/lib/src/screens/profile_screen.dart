@@ -4,6 +4,7 @@ import 'package:mobile_core/mobile_core.dart';
 
 import '../providers/patient_providers.dart';
 import 'medical_edit_screen.dart';
+import 'notification_settings_screen.dart';
 
 /// **Layar 06 — Profil / Hub.**
 ///
@@ -19,6 +20,7 @@ class ProfileScreen extends ConsumerWidget {
     final auth = ref.watch(authProvider);
     final isGuest = auth is! AuthSignedIn;
     final user = auth is AuthSignedIn ? auth.user : null;
+    final notifPrefs = ref.watch(notificationPrefsProvider);
 
     return SingleChildScrollView(
       child: Column(
@@ -124,7 +126,7 @@ class ProfileScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               children: [
-                _MenuItem(
+                DispatchMenuItem(
                   icon: Icons.phone_rounded,
                   tint: c.vitalTint,
                   iconColor: c.vital,
@@ -138,17 +140,25 @@ class ProfileScreen extends ConsumerWidget {
                             ),
                           ),
                 ),
-                _MenuItem(
+                DispatchMenuItem(
                   icon: Icons.notifications_rounded,
                   tint: c.amberTint,
                   iconColor: c.amberText,
                   label: 'Notifikasi',
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (_) => const NotificationSettingsScreen(),
+                    ),
+                  ),
                   trailing: Text(
-                    'AKTIF',
+                    notifPrefs.masterEnabled ? 'AKTIF' : 'NONAKTIF',
                     style: DispatchType.monoStyle(
                       size: 8,
                       weight: 700,
-                      color: c.vital,
+                      color: notifPrefs.masterEnabled
+                          ? c.vital
+                          : c.textTertiary,
                     ),
                   ),
                 ),
@@ -166,7 +176,7 @@ class ProfileScreen extends ConsumerWidget {
                 0,
               ),
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: _MenuItem(
+              child: DispatchMenuItem(
                 icon: Icons.logout_rounded,
                 tint: c.sirenTint,
                 iconColor: c.siren,
@@ -312,70 +322,6 @@ class _MedField extends StatelessWidget {
   }
 }
 
-class _MenuItem extends StatelessWidget {
-  const _MenuItem({
-    required this.icon,
-    required this.tint,
-    required this.iconColor,
-    required this.label,
-    this.onTap,
-    this.trailing,
-    this.labelColor,
-    this.last = false,
-  });
-
-  final IconData icon;
-  final Color tint;
-  final Color iconColor;
-  final String label;
-  final VoidCallback? onTap;
-  final Widget? trailing;
-  final Color? labelColor;
-  final bool last;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          border: last
-              ? null
-              : Border(bottom: BorderSide(color: c.divider)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 30,
-              height: 30,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: tint,
-                borderRadius: BorderRadius.circular(9),
-              ),
-              child: Icon(icon, size: 14, color: iconColor),
-            ),
-            const SizedBox(width: 11),
-            Expanded(
-              child: Text(
-                label,
-                style: DispatchType.bodyStyle(
-                  size: 10.5,
-                  weight: 700,
-                  color: labelColor ?? c.textPrimary,
-                ),
-              ),
-            ),
-            ?trailing,
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 /// Baris "Tampilan" dengan toggle gelap/terang.
 class _ThemeMenuItem extends ConsumerWidget {
   @override
@@ -383,7 +329,7 @@ class _ThemeMenuItem extends ConsumerWidget {
     final c = context.c;
     final isDark = ref.watch(themeModeProvider) == ThemeMode.dark;
 
-    return _MenuItem(
+    return DispatchMenuItem(
       icon: isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
       tint: c.divider,
       iconColor: c.textPrimary,

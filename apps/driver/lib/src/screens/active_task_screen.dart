@@ -123,13 +123,49 @@ class _ActiveTaskScreenState extends ConsumerState<ActiveTaskScreen> {
                             const SizedBox(height: 10),
                             const PanelLabel('PASIEN'),
                             const SizedBox(height: 4),
-                            Text(
-                              '${call.patientName} · ${call.patientPhone ?? '—'}',
-                              style: DispatchType.bodyStyle(
-                                size: 10.5,
-                                weight: 600,
-                                color: c.textPrimary,
-                              ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${call.patientName} · ${call.patientPhone ?? '—'}',
+                                    style: DispatchType.bodyStyle(
+                                      size: 10.5,
+                                      weight: 600,
+                                      color: c.textPrimary,
+                                    ),
+                                  ),
+                                ),
+                                if (call.patientPhone != null)
+                                  Material(
+                                    color: Colors.transparent,
+                                    shape: const CircleBorder(),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: InkWell(
+                                      onTap: () => callPhoneNumber(
+                                        context,
+                                        call.patientPhone!,
+                                      ),
+                                      child: Container(
+                                        width: 28,
+                                        height: 28,
+                                        alignment: Alignment.center,
+                                        margin:
+                                            const EdgeInsets.only(left: 8),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: c.vitalTint,
+                                          border:
+                                              Border.all(color: c.vitalBorder),
+                                        ),
+                                        child: Icon(
+                                          Icons.phone_rounded,
+                                          size: 13,
+                                          color: c.vital,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                             if (call.medical != null &&
                                 call.medical!.allergies.isNotEmpty)

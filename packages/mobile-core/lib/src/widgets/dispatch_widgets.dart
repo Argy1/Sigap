@@ -858,6 +858,77 @@ class DispatchToggle extends StatelessWidget {
   }
 }
 
+/// Satu baris menu dengan ikon berlatar bulat, label, dan slot `trailing`
+/// opsional (mis. status "AKTIF" atau chevron). Dipakai di layar
+/// Profil (App Pasien) dan Akun (App Sopir) — dipromosikan ke sini dari
+/// widget privat App Pasien supaya kedua app memakai komponen yang sama
+/// persis, bukan menduplikasi ~60 baris kode per app.
+class DispatchMenuItem extends StatelessWidget {
+  const DispatchMenuItem({
+    super.key,
+    required this.icon,
+    required this.tint,
+    required this.iconColor,
+    required this.label,
+    this.onTap,
+    this.trailing,
+    this.labelColor,
+    this.last = false,
+  });
+
+  final IconData icon;
+  final Color tint;
+  final Color iconColor;
+  final String label;
+  final VoidCallback? onTap;
+  final Widget? trailing;
+  final Color? labelColor;
+
+  /// True kalau ini item terakhir dalam grup — menghilangkan garis pembatas
+  /// bawah supaya tidak dobel dengan tepi panel yang membungkusnya.
+  final bool last;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          border: last ? null : Border(bottom: BorderSide(color: c.divider)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: tint,
+                borderRadius: BorderRadius.circular(9),
+              ),
+              child: Icon(icon, size: 14, color: iconColor),
+            ),
+            const SizedBox(width: 11),
+            Expanded(
+              child: Text(
+                label,
+                style: DispatchType.bodyStyle(
+                  size: 10.5,
+                  weight: 700,
+                  color: labelColor ?? c.textPrimary,
+                ),
+              ),
+            ),
+            ?trailing,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// Kotak peringatan medis merah — dipakai di layar Tugas Masuk App Sopir.
 class MedicalAlert extends StatelessWidget {
   const MedicalAlert({super.key, required this.text});

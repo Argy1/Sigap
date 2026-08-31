@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_core/mobile_core.dart';
 
 import '../providers/driver_providers.dart';
+import 'notification_settings_screen.dart';
 
 /// **Layar Akun sopir.**
 ///
@@ -20,6 +21,7 @@ class AccountScreen extends ConsumerWidget {
     final user = auth is AuthSignedIn ? auth.user : null;
     final isDark = ref.watch(themeModeProvider) == ThemeMode.dark;
     final status = profile.value?.availabilityStatus;
+    final notifPrefs = ref.watch(notificationPrefsProvider);
 
     return SingleChildScrollView(
       child: Column(
@@ -98,6 +100,47 @@ class AccountScreen extends ConsumerWidget {
                       status == AvailabilityStatus.available ? c.vital : null,
                 ),
               ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              DispatchSpacing.screenH,
+              14,
+              DispatchSpacing.screenH,
+              0,
+            ),
+            child: const PanelLabel('PENGATURAN'),
+          ),
+
+          DispatchPanel(
+            margin: const EdgeInsets.fromLTRB(
+              DispatchSpacing.screenH,
+              8,
+              DispatchSpacing.screenH,
+              0,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: DispatchMenuItem(
+              icon: Icons.notifications_rounded,
+              tint: c.amberTint,
+              iconColor: c.amberText,
+              label: 'Notifikasi',
+              last: true,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => const NotificationSettingsScreen(),
+                ),
+              ),
+              trailing: Text(
+                notifPrefs.masterEnabled ? 'AKTIF' : 'NONAKTIF',
+                style: DispatchType.monoStyle(
+                  size: 8,
+                  weight: 700,
+                  color: notifPrefs.masterEnabled ? c.vital : c.textTertiary,
+                ),
+              ),
             ),
           ),
 
