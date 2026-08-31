@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && node scripts/copy-assets.mjs",
     "start": "node dist/server.js",
     "migrate": "tsx src/db/migrate.ts up",
     "migrate:status": "tsx src/db/migrate.ts status",
@@ -18,7 +18,10 @@
     "typecheck": "tsc --noEmit",
     "test:rbac": "tsx src/tests/rbac.audit.ts",
     "test:goldenpath": "tsx src/tests/golden-path.ts",
-    "test:socket": "tsx src/tests/socket.audit.ts"
+    "test:socket": "tsx src/tests/socket.audit.ts",
+    "migrate:prod": "node dist/db/migrate.js up",
+    "seed:prod": "node dist/db/seed.js",
+    "start:prod": "node dist/db/migrate.js up && node dist/server.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
