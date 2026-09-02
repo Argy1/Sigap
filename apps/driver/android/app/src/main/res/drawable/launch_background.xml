@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Modify this file to customize your launch splash screen -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/white" />
+    <!-- Gelap adalah default sistem desain "Dispatch Console" (lihat CLAUDE.md) —
+         warna ini sama dengan token `ink` (#0A0E14), supaya tidak ada kedipan
+         putih sebelum BootIntro (lihat boot_intro.dart) tampil. -->
+    <item android:drawable="@color/launch_bg" />
 
     <!-- You can insert your own image assets here -->
     <!-- <item>

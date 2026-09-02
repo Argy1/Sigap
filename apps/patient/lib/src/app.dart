@@ -23,8 +23,43 @@ class PatientApp extends ConsumerWidget {
       themeMode: themeMode,
       theme: buildDispatchTheme(Brightness.light),
       darkTheme: buildDispatchTheme(Brightness.dark),
-      home: const _Root(),
+      home: const _AppRoot(),
     );
+  }
+}
+
+/// Boot intro tampil sekali di awal cold-start, lalu menyingkir ke [_Root]
+/// yang sesungguhnya. Dipisah dari pengecekan auth di bawahnya supaya intro
+/// selalu tampil utuh (durasi tetap, bisa di-skip) tanpa peduli auth restore
+/// di baliknya sudah selesai atau belum.
+class _AppRoot extends StatefulWidget {
+  const _AppRoot();
+
+  @override
+  State<_AppRoot> createState() => _AppRootState();
+}
+
+class _AppRootState extends State<_AppRoot> {
+  bool _introDone = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_introDone) {
+      return BootIntro(
+        appName: 'SIGAP',
+        tagline: 'DISPATCH CONSOLE',
+        icon: Icons.favorite_rounded,
+        bootLines: const [
+          'MENGINISIALISASI SISTEM SIGAP...',
+          'MEMERIKSA LAYANAN LOKASI...',
+          'SIAP MELAYANI DARURAT',
+        ],
+        onFinished: () {
+          if (mounted) setState(() => _introDone = true);
+        },
+      );
+    }
+    return const _Root();
   }
 }
 

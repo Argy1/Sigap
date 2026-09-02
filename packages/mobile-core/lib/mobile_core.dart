@@ -29,6 +29,7 @@ export 'src/notifications/notification_service.dart';
 export 'src/providers/core_providers.dart';
 
 // Widget
+export 'src/widgets/boot_intro.dart';
 export 'src/widgets/dispatch_map.dart';
 export 'src/widgets/dispatch_nav_bar.dart';
 export 'src/widgets/dispatch_widgets.dart';

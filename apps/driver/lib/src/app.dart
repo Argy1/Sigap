@@ -21,8 +21,41 @@ class DriverApp extends ConsumerWidget {
       themeMode: themeMode,
       theme: buildDispatchTheme(Brightness.light),
       darkTheme: buildDispatchTheme(Brightness.dark),
-      home: const _Root(),
+      home: const _AppRoot(),
     );
+  }
+}
+
+/// Boot intro tampil sekali di awal cold-start, lalu menyingkir ke [_Root]
+/// yang sesungguhnya — lihat catatan yang sama di `apps/patient/lib/src/app.dart`.
+class _AppRoot extends StatefulWidget {
+  const _AppRoot();
+
+  @override
+  State<_AppRoot> createState() => _AppRootState();
+}
+
+class _AppRootState extends State<_AppRoot> {
+  bool _introDone = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_introDone) {
+      return BootIntro(
+        appName: 'SIGAP SOPIR',
+        tagline: 'DISPATCH CONSOLE',
+        icon: Icons.local_shipping_rounded,
+        bootLines: const [
+          'MENGHUBUNGKAN KE RUMAH SAKIT...',
+          'MEMERIKSA GPS...',
+          'SIAP BERTUGAS',
+        ],
+        onFinished: () {
+          if (mounted) setState(() => _introDone = true);
+        },
+      );
+    }
+    return const _Root();
   }
 }
 
